@@ -1,4 +1,4 @@
-FROM node:18-alpine as base
+FROM node:18-bullseye-slim as base
 
 RUN corepack enable
 
@@ -14,12 +14,12 @@ CMD [ "/bin/sh" ]
 
 FROM base as testing
 
-CMD [ "yarn", "test" ]
+RUN yarn test
 
 FROM base as lint
 
-CMD [ "yarn", "lint" ]
+RUN yarn lint
 
 FROM base as production
 
-CMD [ "yarn", "start" ]
+CMD ["yarn", "start"]
