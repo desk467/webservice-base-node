@@ -1,0 +1,38 @@
+name: Continuous Integration
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  ci:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        nodejs: ["v18.14.0"]
+      fail-fast: true
+
+    steps:
+      - name: Setup repo
+        uses: actions/checkout@v3
+
+      - name: Enable Corepack
+        run: corepack enable
+      
+      - name: Setup Yarn
+        run: corepack prepare --activate
+
+      - name: Setup NodeJS
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.nodejs }}
+
+      - name: Test
+        run: yarn test
+
+      - name: Lint
+        run: yarn lint
